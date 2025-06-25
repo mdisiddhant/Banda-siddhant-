@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>बंदा की सेवा - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #000, #111);
+      color: white;
+      padding-top: 70px;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #00ffff22;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px #00ffff;
+      z-index: 1000;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 15px 30px;
+      justify-content: space-around;
+    }
+    nav li {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #fff;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 36px;
+      color: #00ffff;
+      text-shadow: 0 0 15px #00ffffaa;
+    }
+    button {
+      padding: 12px 24px;
+      margin-top: 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #00ffff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #00ffff80;
+    }
+    button:hover {
+      background-color: #00cccc;
+    }
+    .output {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #ff0;
+      text-shadow: 0 0 5px yellow;
+    }
+  </style>
+</head>
+<body onload="brython()">
+
+  <!-- ✅ Navigation Bar -->
+  <nav>
+    <ul>
+      <li><a href="#">🏠 होम</a></li>
+      <li><a href="#">📦 ऑर्डर</a></li>
+      <li><a href="#">📞 संपर्क करें</a></li>
+      <li><a href="#">🔐 लॉगिन</a></li>
+    </ul>
+  </nav>
+
+  <!-- ✅ Main Content -->
+  <div class="container">
+    <h1>🙏 स्वागत है बंदा की सेवा पर!</h1>
+    <p>यहाँ से आप ऑर्डर बुक कर सकते हैं, सेवाएँ देख सकते हैं और हमसे संपर्क कर सकते हैं।</p>
+
+    <!-- Python Demo -->
+    <button id="btn">👉 Python से अभिवादन लें</button>
+    <div class="output" id="output">🎯 यहाँ पर Python से मैसेज आएगा...</div>
+  </div>
+
+  <!-- ✅ Python Code via Brython -->
+  <script type="text/python">
+    from browser import document
+
+    def greet(ev):
+        document["output"].text = "👋 नमस्ते! यह मैसेज Python से आया है।"
+
+    document["btn"].bind("click", greet)
+  </script>
+
+</body>
+</html>
