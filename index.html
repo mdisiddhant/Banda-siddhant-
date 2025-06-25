@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>बंदा की सेवा - Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,9 +15,10 @@
       color: #fff;
       padding-top: 100px;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* Glowing Background */
+    /* Enhanced Glowing Background */
     body::before {
       content: '';
       position: fixed;
@@ -25,21 +26,49 @@
       height: 200%;
       top: -50%;
       left: -50%;
-      background: radial-gradient(circle at 30% 30%, #ff00cc33, transparent),
-                  radial-gradient(circle at 70% 70%, #00ffff33, transparent),
-                  radial-gradient(circle at 50% 80%, #ffff0033, transparent);
+      background: 
+        radial-gradient(circle at 30% 30%, #ff00cc33, transparent),
+        radial-gradient(circle at 70% 70%, #00ffff33, transparent),
+        radial-gradient(circle at 50% 80%, #ffff0033, transparent),
+        radial-gradient(circle at 10% 20%, #ff660033, transparent),
+        radial-gradient(circle at 90% 60%, #00ff6633, transparent);
       filter: blur(100px);
       animation: moveBg 30s infinite alternate;
       z-index: -1;
     }
 
-    @keyframes moveBg {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
+    /* Particle Background */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
 
-    /* Navigation Bar */
+    .particle {
+      position: absolute;
+      background: rgba(0, 255, 255, 0.5);
+      border-radius: 50%;
+      box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff;
+      animation: floatParticle linear infinite;
+    }
+
+    @keyframes moveBg {
+      0% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.2) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    
+    @keyframes floatParticle {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+    }
+
+    /* Enhanced Navigation Bar */
     nav {
       position: fixed;
       top: 0;
@@ -49,7 +78,13 @@
       padding: 15px 0;
       z-index: 999;
       border-bottom: 1px solid #00ffff88;
-      box-shadow: 0 0 20px #00ffff55;
+      box-shadow: 0 0 30px #00ffff55, 0 0 60px #ff00cc55;
+      animation: navGlow 4s infinite alternate;
+    }
+
+    @keyframes navGlow {
+      0% { box-shadow: 0 0 20px #00ffff55, 0 0 40px #ff00cc55; }
+      100% { box-shadow: 0 0 40px #00ffffaa, 0 0 60px #ff00ccaa; }
     }
 
     nav ul {
@@ -72,90 +107,256 @@
       border-radius: 12px;
       transition: 0.3s ease;
       position: relative;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #00ffff, #ff00cc, #00ffff, #ff00cc);
+      background-size: 400% 400%;
+      border-radius: 14px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      animation: borderGradient 4s linear infinite;
+    }
+
+    @keyframes borderGradient {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 400% 50%; }
     }
 
     nav a:hover {
       color: #00ffff;
       background: rgba(0, 255, 255, 0.15);
-      box-shadow: 0 0 10px #00ffffaa;
+      box-shadow: 0 0 20px #00ffffaa;
+      text-shadow: 0 0 15px #00ffff;
     }
 
-    /* Main Container */
+    nav a:hover::after {
+      opacity: 1;
+    }
+
+    /* Enhanced Main Container */
     .container {
       max-width: 900px;
       margin: auto;
-      padding: 50px 25px;
+      padding: 60px 40px;
       text-align: center;
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      box-shadow: 0 0 30px #00fff066;
+      border-radius: 25px;
+      box-shadow: 0 0 60px #00fff066, 0 0 100px #ff00cc66;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: containerFloat 6s ease-in-out infinite;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #00ffff, #ff00cc, #00ffff, #ff00cc);
+      background-size: 400% 400%;
+      border-radius: 27px;
+      z-index: -1;
+      opacity: 0.7;
+      filter: blur(15px);
+      animation: borderGradient 6s linear infinite;
+    }
+
+    @keyframes containerFloat {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0); }
     }
 
     h1 {
-      font-size: 38px;
+      font-size: 42px;
       color: #00ffff;
-      text-shadow: 0 0 12px #00ffff, 0 0 30px #00ffffaa;
+      text-shadow: 0 0 15px #00ffff, 0 0 40px #00ffffaa;
       animation: pulseText 2s infinite;
+      margin-bottom: 20px;
     }
 
     p {
-      font-size: 18px;
+      font-size: 20px;
       color: #ddd;
-      text-shadow: 0 0 8px #ffffff22;
+      text-shadow: 0 0 10px #ffffff44;
       margin-top: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     @keyframes pulseText {
-      0%, 100% { text-shadow: 0 0 10px #00ffff; }
-      50% { text-shadow: 0 0 20px #00ffff; }
+      0%, 100% { text-shadow: 0 0 15px #00ffff, 0 0 40px #00ffffaa; }
+      50% { text-shadow: 0 0 25px #00ffff, 0 0 60px #00ffffcc; }
     }
 
     button {
       background: linear-gradient(45deg, #00ffff, #ff00cc);
       color: black;
       font-weight: bold;
-      padding: 14px 28px;
-      font-size: 18px;
+      padding: 16px 36px;
+      font-size: 20px;
       border: none;
-      border-radius: 12px;
+      border-radius: 15px;
       cursor: pointer;
-      box-shadow: 0 0 20px #00ffffaa;
+      box-shadow: 0 0 30px #00ffffaa, 0 0 50px #ff00ccaa;
       transition: 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      margin-top: 20px;
+      animation: buttonGlow 3s infinite alternate;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ffcc00, #00ffff, #ff00cc);
+      background-size: 200% 200%;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      animation: borderGradient 3s linear infinite;
+    }
+
+    @keyframes buttonGlow {
+      0% { box-shadow: 0 0 20px #00ffffaa, 0 0 40px #ff00ccaa; }
+      100% { box-shadow: 0 0 40px #00ffffcc, 0 0 60px #ff00cccc; }
     }
 
     button:hover {
       background: linear-gradient(45deg, #ffcc00, #00ffff);
-      box-shadow: 0 0 25px #00ffffcc;
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px #00ffffcc, 0 0 60px #ff00cccc;
+    }
+
+    button:hover::before {
+      opacity: 0.3;
     }
 
     .output {
-      margin-top: 25px;
-      font-size: 20px;
+      margin-top: 40px;
+      font-size: 24px;
       color: #ff0;
-      text-shadow: 0 0 10px yellow;
+      text-shadow: 0 0 15px yellow;
+      background: rgba(255, 255, 0, 0.05);
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 0, 0.1);
+      box-shadow: 0 0 20px rgba(255, 255, 0, 0.2);
+      animation: outputGlow 3s infinite alternate;
+    }
+
+    @keyframes outputGlow {
+      0% { box-shadow: 0 0 15px rgba(255, 255, 0, 0.2); }
+      100% { box-shadow: 0 0 30px rgba(255, 255, 0, 0.5); }
     }
 
     footer {
-      margin-top: 50px;
+      margin-top: 70px;
       text-align: center;
-      padding: 20px;
+      padding: 25px;
       color: #aaa;
-      font-size: 14px;
-      border-top: 1px solid #222;
+      font-size: 16px;
+      border-top: 1px solid #333;
+      position: relative;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
     }
 
-    @media (max-width: 600px) {
-      nav ul {
-        flex-direction: column;
-      }
-      nav li {
-        margin: 8px 0;
-      }
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #00ffff, #ff00cc, transparent);
+      box-shadow: 0 0 20px #00ffff55;
+    }
+
+    /* Floating Elements */
+    .floating-icon {
+      position: fixed;
+      z-index: 100;
+      animation: float 8s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px #00ffff);
+    }
+
+    .floating-icon:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      font-size: 40px;
+      animation-delay: 0s;
+    }
+
+    .floating-icon:nth-child(2) {
+      top: 40%;
+      right: 10%;
+      font-size: 30px;
+      animation-delay: 2s;
+    }
+
+    .floating-icon:nth-child(3) {
+      top: 70%;
+      left: 15%;
+      font-size: 50px;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(10deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    @media (max-width: 768px) {
+      body { padding-top: 80px; }
+      .container { padding: 40px 20px; max-width: 95%; }
+      h1 { font-size: 32px; }
+      p { font-size: 18px; }
+      nav ul { flex-wrap: wrap; }
+      nav li { margin: 8px 10px; }
+      .floating-icon { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      nav li { margin: 6px 8px; }
+      nav a { padding: 8px 14px; font-size: 14px; }
+      button { padding: 14px 28px; font-size: 18px; }
+      .output { font-size: 20px; padding: 15px; }
     }
   </style>
 </head>
 <body onload="brython()">
+  <!-- Particle Background -->
+  <div class="particles" id="particles"></div>
+  
+  <!-- Floating Icons -->
+  <div class="floating-icon">🚀</div>
+  <div class="floating-icon">✨</div>
+  <div class="floating-icon">💎</div>
+
   <!-- 🔷 Navigation Bar -->
   <nav>
     <ul>
@@ -174,7 +375,7 @@
   <!-- 🌟 Main Content -->
   <div class="container">
     <h1>🙏 बंदा की सेवा में आपका स्वागत है!</h1>
-    <p>यहाँ से करें Local Delivery, Kirana ऑर्डर, VIP सेवाएं और Digital Documents — सब कुछ एक ही जगह!</p>
+    <p>यहाँ से करें Local Delivery, Kirana ऑर्डर, VIP सेवाएं और Digital Documents — सब कुछ एक ही जगह! हमारी सेवाएं तेज, विश्वसनीय और सस्ती हैं।</p>
 
     <button id="btn">🎯 Python से Greeting लो</button>
     <div class="output" id="output">🔮 Python से संदेश यहाँ दिखेगा...</div>
@@ -187,11 +388,28 @@
   <!-- 🐍 Brython Python Code -->
   <script type="text/python">
     from browser import document
+    import random
 
     def greet(event):
-        document["output"].text = "👋 नमस्ते! यह मैसेज Python से भेजा गया है।"
+        document["output"].text = "👋 नमस्ते! यह मैसेज Python से भेजा गया है। बंदा की सेवा आपकी सभी जरूरतों को पूरा करने के लिए तैयार है!"
+        document["output"].style.color = f"hsl({random.randint(0, 360)}, 100%, 70%)"
+        document["output"].style.textShadow = f"0 0 20px hsl({random.randint(0, 360)}, 100%, 50%)"
 
     document["btn"].bind("click", greet)
+    
+    # Create particles
+    particles_container = document["particles"]
+    for _ in range(50):
+        particle = document.createElement("div")
+        particle.className = "particle"
+        particle.style.left = f"{random.random() * 100}%"
+        particle.style.top = f"{random.random() * 100}%"
+        size = random.randint(2, 8)
+        particle.style.width = f"{size}px"
+        particle.style.height = f"{size}px"
+        particle.style.animationDuration = f"{random.randint(10, 30)}s"
+        particle.style.animationDelay = f"{random.random() * 5}s"
+        particles_container.appendChild(particle)
   </script>
 </body>
 </html>
