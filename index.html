@@ -55,6 +55,24 @@
       border-radius: 12px;
       text-align: left;
     }
+
+    .success {
+      background: #28a745;
+      color: white;
+      padding: 10px;
+      margin: 10px auto;
+      border-radius: 8px;
+      width: 90%;
+    }
+
+    .error {
+      background: #dc3545;
+      color: white;
+      padding: 10px;
+      margin: 10px auto;
+      border-radius: 8px;
+      width: 90%;
+    }
   </style>
 </head>
 <body>
@@ -63,6 +81,7 @@
 
   <div class="container">
     <h3>मदद पोस्ट करें</h3>
+    <div id="msgBox"></div>
     <form id="helpForm">
       <input type="text" id="name" placeholder="आपका नाम" required><br>
       <input type="text" id="mobile" placeholder="मोबाइल नंबर" required><br>
@@ -80,7 +99,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
   <script>
-    // ✅ Firebase Config (आपका खुद का config यहाँ है)
+    // ✅ Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyD2o9QWQYbM60C0_0C8HjAaPcCvD0Y6OZE",
       authDomain: "help-b38c1.firebaseapp.com",
@@ -88,16 +107,23 @@
       projectId: "help-b38c1",
       storageBucket: "help-b38c1.appspot.com",
       messagingSenderId: "58715936530",
-      appId: "1:58715936530:web:75f74f1fcdfd2a0eb485cb",
-      measurementId: "G-NWGWXQYETF"
+      appId: "1:58715936530:web:75f74f1fcdfd2a0eb485cb"
     };
 
-    // ✅ Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ✅ Form Submit Logic
-    document.getElementById("helpForm").addEventListener("submit", function (e) {
+    const form = document.getElementById("helpForm");
+    const msgBox = document.getElementById("msgBox");
+
+    // ✅ Create or get unique deviceID from localStorage
+    let deviceID = localStorage.getItem("device_id");
+    if (!deviceID) {
+      deviceID = "dev_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      localStorage.setItem("device_id", deviceID);
+    }
+
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const name = document.getElementById("name").value.trim();
@@ -106,30 +132,36 @@
       const message = document.getElementById("message").value.trim();
 
       if (!name || !mobile || !area || !message) {
-        alert("सभी जानकारी भरें");
+        showMsg("सभी फ़ील्ड भरना ज़रूरी है।", "error");
         return;
       }
 
-      db.ref("posts/" + mobile).once("value").then((snapshot) => {
+      // ✅ Check if this device already posted
+      db.ref("devicePosts/" + deviceID).once("value").then(snapshot => {
         if (snapshot.exists()) {
-          alert("आप पहले ही एक पोस्ट कर चुके हैं। 24 घंटे बाद फिर से पोस्ट करें।");
+          showMsg("आपके डिवाइस से पहले ही पोस्ट हो चुका है। 24 घंटे बाद फिर से प्रयास करें।", "error");
         } else {
           const timestamp = Date.now();
-          db.ref("posts/" + mobile).set({
+          db.ref("devicePosts/" + deviceID).set({
             name,
             mobile,
             area,
             message,
             timestamp
           }).then(() => {
-            alert("✅ आपकी मदद पोस्ट हो गई है। धन्यवाद!");
-            document.getElementById("helpForm").reset();
-          }).catch((error) => {
-            alert("❌ कुछ गड़बड़ हो गई: " + error.message);
+            showMsg("✅ आपकी मदद पोस्ट सफल रही!", "success");
+            form.reset();
+          }).catch(err => {
+            showMsg("❌ पोस्ट सेव करने में त्रुटि: " + err.message, "error");
           });
         }
       });
     });
+
+    function showMsg(msg, type) {
+      msgBox.innerHTML = `<div class="${type}">${msg}</div>`;
+      setTimeout(() => msgBox.innerHTML = "", 4000);
+    }
 
     // ✅ Show Live Posts
     const postsContainer = document.getElementById("posts");
@@ -139,12 +171,9 @@
       const age = now - data.timestamp;
 
       if (age >= 86400000) {
-        db.ref("posts/" + key).remove(); // 24 घंटे बाद हटाओ
+        db.ref("devicePosts/" + key).remove();
         return;
       }
-
-      const hoursLeft = Math.floor((86400000 - age) / (1000 * 60 * 60));
-      const minsLeft = Math.floor(((86400000 - age) % (1000 * 60 * 60)) / (1000 * 60));
 
       const postDiv = document.createElement("div");
       postDiv.className = "post";
@@ -153,12 +182,11 @@
         <strong>📱 मोबाइल:</strong> ${data.mobile}<br>
         <strong>📍 एरिया:</strong> ${data.area}<br>
         <strong>📝 विवरण:</strong> ${data.message}<br>
-        <strong>⏳ बचे समय:</strong> ${hoursLeft} घंटे ${minsLeft} मिनट
       `;
       postsContainer.appendChild(postDiv);
     }
 
-    db.ref("posts").on("value", (snapshot) => {
+    db.ref("devicePosts").on("value", (snapshot) => {
       postsContainer.innerHTML = "";
       snapshot.forEach((child) => {
         displayPost(child.key, child.val());
@@ -167,4 +195,4 @@
   </script>
 
 </body>
-</html>
+  </html>
