@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <title>आपसी मदद केंद्र</title>
+  <title>🤝 आपसी मदद केंद्र</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -80,7 +80,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
   <script>
-    // Firebase Config
+    // ✅ Firebase Config (आपका खुद का config यहाँ है)
     const firebaseConfig = {
       apiKey: "AIzaSyD2o9QWQYbM60C0_0C8HjAaPcCvD0Y6OZE",
       authDomain: "help-b38c1.firebaseapp.com",
@@ -92,12 +92,14 @@
       measurementId: "G-NWGWXQYETF"
     };
 
+    // ✅ Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Form Submission
+    // ✅ Form Submit Logic
     document.getElementById("helpForm").addEventListener("submit", function (e) {
       e.preventDefault();
+
       const name = document.getElementById("name").value.trim();
       const mobile = document.getElementById("mobile").value.trim();
       const area = document.getElementById("area").value.trim();
@@ -108,8 +110,7 @@
         return;
       }
 
-      // Check if post already exists for this mobile
-      db.ref("posts/" + mobile).once("value", (snapshot) => {
+      db.ref("posts/" + mobile).once("value").then((snapshot) => {
         if (snapshot.exists()) {
           alert("आप पहले ही एक पोस्ट कर चुके हैं। 24 घंटे बाद फिर से पोस्ट करें।");
         } else {
@@ -120,22 +121,25 @@
             area,
             message,
             timestamp
+          }).then(() => {
+            alert("✅ आपकी मदद पोस्ट हो गई है। धन्यवाद!");
+            document.getElementById("helpForm").reset();
+          }).catch((error) => {
+            alert("❌ कुछ गड़बड़ हो गई: " + error.message);
           });
-          alert("आपकी मदद पोस्ट हो गई है। धन्यवाद!");
-          document.getElementById("helpForm").reset();
         }
       });
     });
 
-    // Display Posts
+    // ✅ Show Live Posts
     const postsContainer = document.getElementById("posts");
 
     function displayPost(key, data) {
       const now = Date.now();
       const age = now - data.timestamp;
+
       if (age >= 86400000) {
-        // 24 घंटे के बाद Delete
-        db.ref("posts/" + key).remove();
+        db.ref("posts/" + key).remove(); // 24 घंटे बाद हटाओ
         return;
       }
 
