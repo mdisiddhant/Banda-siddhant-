@@ -116,10 +116,10 @@
     const form = document.getElementById("helpForm");
     const msgBox = document.getElementById("msgBox");
 
-    // ✅ Create or get unique deviceID from localStorage
+    // ✅ Device ID Logic
     let deviceID = localStorage.getItem("device_id");
     if (!deviceID) {
-      deviceID = "dev_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      deviceID = "dev_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
       localStorage.setItem("device_id", deviceID);
     }
 
@@ -132,17 +132,16 @@
       const message = document.getElementById("message").value.trim();
 
       if (!name || !mobile || !area || !message) {
-        showMsg("सभी फ़ील्ड भरना ज़रूरी है।", "error");
+        showMsg("❌ सभी फ़ील्ड भरना ज़रूरी है।", "error");
         return;
       }
 
-      // ✅ Check if this device already posted
-      db.ref("devicePosts/" + deviceID).once("value").then(snapshot => {
+      db.ref("posts/" + deviceID).once("value").then(snapshot => {
         if (snapshot.exists()) {
-          showMsg("आपके डिवाइस से पहले ही पोस्ट हो चुका है। 24 घंटे बाद फिर से प्रयास करें।", "error");
+          showMsg("❌ आपके डिवाइस से पहले ही पोस्ट हो चुका है।", "error");
         } else {
           const timestamp = Date.now();
-          db.ref("devicePosts/" + deviceID).set({
+          db.ref("posts/" + deviceID).set({
             name,
             mobile,
             area,
@@ -152,7 +151,7 @@
             showMsg("✅ आपकी मदद पोस्ट सफल रही!", "success");
             form.reset();
           }).catch(err => {
-            showMsg("❌ पोस्ट सेव करने में त्रुटि: " + err.message, "error");
+            showMsg("❌ पोस्ट सेव करने में समस्या: " + err.message, "error");
           });
         }
       });
@@ -163,7 +162,7 @@
       setTimeout(() => msgBox.innerHTML = "", 4000);
     }
 
-    // ✅ Show Live Posts
+    // ✅ Live Help Board – Show All Posts
     const postsContainer = document.getElementById("posts");
 
     function displayPost(key, data) {
@@ -171,7 +170,7 @@
       const age = now - data.timestamp;
 
       if (age >= 86400000) {
-        db.ref("devicePosts/" + key).remove();
+        db.ref("posts/" + key).remove();
         return;
       }
 
@@ -186,7 +185,7 @@
       postsContainer.appendChild(postDiv);
     }
 
-    db.ref("devicePosts").on("value", (snapshot) => {
+    db.ref("posts").on("value", (snapshot) => {
       postsContainer.innerHTML = "";
       snapshot.forEach((child) => {
         displayPost(child.key, child.val());
@@ -195,4 +194,4 @@
   </script>
 
 </body>
-  </html>
+</html>
