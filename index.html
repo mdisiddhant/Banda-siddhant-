@@ -27,7 +27,7 @@
       padding: 20px;
     }
 
-    input, textarea, button {
+    input, select, button {
       width: 90%;
       padding: 12px;
       margin: 10px 0;
@@ -80,16 +80,50 @@
   <header>🤝 आपसी मदद केंद्र</header>
 
   <div class="container">
-    <h3>मदद पोस्ट करें</h3>
+
+    <!-- 🌟 Motivational Message -->
+    <div style="background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 20px; border-radius: 10px; font-size: 16px;">
+      <strong>🌟 “आपके एक छोटे कदम से किसी की ज़िंदगी बदल सकती है।”</strong><br><br>
+      🤝 चलिए साथ मिलकर समाज को बेहतर बनाएं।<br>
+      मदद करें — जब भी, जहाँ भी, जितनी हो सके।
+    </div>
+
+    <!-- 🔔 Help Reason Box -->
+    <div style="background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 20px; border-radius: 10px;">
+      <strong>🔔 आप किन चीज़ों के लिए मदद माँग सकते हैं?</strong><br><br>
+      💊 दवाइयों की ज़रूरत<br>
+      🧥 कपड़े / कंबल<br>
+      💼 नौकरी / काम की तलाश<br>
+      🚗 मरीज को हॉस्पिटल ले जाना<br>
+      🏠 किराए का कमरा / घर चाहिए<br>
+      📚 पढ़ाई में मदद<br>
+      ⚡ बिजली / पानी की समस्या<br>
+      👨‍👩‍👧‍👦 बुजुर्ग / बच्चों के लिए मदद
+    </div>
+
+    <!-- ✅ Message Box -->
     <div id="msgBox"></div>
+
+    <!-- 📝 Post Form -->
     <form id="helpForm">
       <input type="text" id="name" placeholder="आपका नाम" required><br>
       <input type="text" id="mobile" placeholder="मोबाइल नंबर" required><br>
       <input type="text" id="area" placeholder="आपका एरिया" required><br>
-      <textarea id="message" rows="4" placeholder="मदद का विवरण" required></textarea><br>
+      <select id="reason" required>
+        <option value="">-- मदद का कारण चुनें --</option>
+        <option>💊 दवाइयों की ज़रूरत</option>
+        <option>🧥 कपड़े / कंबल</option>
+        <option>💼 नौकरी / काम की तलाश</option>
+        <option>🚗 मरीज को हॉस्पिटल ले जाना</option>
+        <option>🏠 किराए का कमरा / घर चाहिए</option>
+        <option>📚 पढ़ाई में मदद</option>
+        <option>⚡ बिजली / पानी की समस्या</option>
+        <option>👨‍👩‍👧‍👦 बुजुर्ग / बच्चों के लिए मदद</option>
+      </select><br>
       <button type="submit">पोस्ट करें</button>
     </form>
 
+    <!-- 🔴 Live Help Board -->
     <h3 style="margin-top: 40px;">🔴 Live Help Board</h3>
     <div id="posts"></div>
   </div>
@@ -112,11 +146,10 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     const form = document.getElementById("helpForm");
     const msgBox = document.getElementById("msgBox");
 
-    // ✅ Device ID Logic
+    // Get device ID from localStorage
     let deviceID = localStorage.getItem("device_id");
     if (!deviceID) {
       deviceID = "dev_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
@@ -129,31 +162,40 @@
       const name = document.getElementById("name").value.trim();
       const mobile = document.getElementById("mobile").value.trim();
       const area = document.getElementById("area").value.trim();
-      const message = document.getElementById("message").value.trim();
+      const reason = document.getElementById("reason").value;
 
-      if (!name || !mobile || !area || !message) {
+      if (!name || !mobile || !area || !reason) {
         showMsg("❌ सभी फ़ील्ड भरना ज़रूरी है।", "error");
         return;
       }
 
-      db.ref("posts/" + deviceID).once("value").then(snapshot => {
+      const now = Date.now();
+
+      db.ref("devicePosts/" + deviceID).once("value").then(snapshot => {
         if (snapshot.exists()) {
-          showMsg("❌ आपके डिवाइस से पहले ही पोस्ट हो चुका है।", "error");
-        } else {
-          const timestamp = Date.now();
-          db.ref("posts/" + deviceID).set({
-            name,
-            mobile,
-            area,
-            message,
-            timestamp
-          }).then(() => {
-            showMsg("✅ आपकी मदद पोस्ट सफल रही!", "success");
-            form.reset();
-          }).catch(err => {
-            showMsg("❌ पोस्ट सेव करने में समस्या: " + err.message, "error");
-          });
+          const lastPostTime = snapshot.val().timestamp;
+          if (now - lastPostTime < 86400000) {
+            showMsg("❌ आपके डिवाइस से पहले ही पोस्ट हो चुकी है।", "error");
+            return;
+          }
         }
+
+        const postData = {
+          name, mobile, area, reason, timestamp: now
+        };
+
+        const newPostKey = db.ref().child("posts").push().key;
+
+        const updates = {};
+        updates["/posts/" + newPostKey] = postData;
+        updates["/devicePosts/" + deviceID] = postData;
+
+        db.ref().update(updates).then(() => {
+          showMsg("✅ आपकी मदद पोस्ट सफल रही!", "success");
+          form.reset();
+        }).catch(err => {
+          showMsg("❌ पोस्ट सेव करने में समस्या: " + err.message, "error");
+        });
       });
     });
 
@@ -162,7 +204,7 @@
       setTimeout(() => msgBox.innerHTML = "", 4000);
     }
 
-    // ✅ Live Help Board – Show All Posts
+    // ✅ Show All Posts
     const postsContainer = document.getElementById("posts");
 
     function displayPost(key, data) {
@@ -180,7 +222,7 @@
         <strong>👤 नाम:</strong> ${data.name}<br>
         <strong>📱 मोबाइल:</strong> ${data.mobile}<br>
         <strong>📍 एरिया:</strong> ${data.area}<br>
-        <strong>📝 विवरण:</strong> ${data.message}<br>
+        <strong>📌 मदद का कारण:</strong> ${data.reason}<br>
       `;
       postsContainer.appendChild(postDiv);
     }
