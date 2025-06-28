@@ -4,128 +4,501 @@
   <meta charset="UTF-8">
   <title>🤝 आपसी मदद केंद्र</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #2193b0, #6dd5ed);
-      color: #fff;
+    :root {
+      --primary: #3498db;
+      --secondary: #2c3e50;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --error: #c0392b;
+      --text: #333;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      text-align: center;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e5799, #207cca, #2989d8, #1e5799);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+      opacity: 0.15;
+      z-index: -1;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     header {
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.2);
-      font-size: 26px;
+      padding: 25px;
+      background: rgba(44, 62, 80, 0.9);
+      font-size: 28px;
       font-weight: bold;
+      color: white;
+      text-align: center;
+      border-radius: 15px;
+      margin: 0 auto 30px;
+      max-width: 800px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
     }
 
     .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png');
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 20px;
+      color: var(--secondary);
+      text-align: center;
+    }
+
+    h2 {
+      position: relative;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      border-left: 5px solid var(--primary);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, var(--primary), transparent 70%);
+      border-radius: 0 15px 0 100%;
+    }
+
+    .motivation-card {
+      background: linear-gradient(135deg, #3498db, #2c3e50);
+      color: white;
+      border-left: 5px solid var(--accent);
+    }
+
+    .motivation-card .icon {
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 15px;
+      color: #ffcc00;
+    }
+
+    .motivation-card h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .reason-item {
+      background: rgba(236, 240, 241, 0.7);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid #ddd;
+    }
+
+    .reason-item:hover {
+      background: rgba(52, 152, 219, 0.2);
+      transform: scale(1.03);
+    }
+
+    .reason-item i {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: var(--primary);
     }
 
     input, select, button {
-      width: 90%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
+      width: 100%;
+      padding: 15px;
+      margin: 12px 0;
+      border-radius: 10px;
+      border: 2px solid #ddd;
       font-size: 16px;
+      font-family: 'Roboto', sans-serif;
+      transition: var(--transition);
+      background: white;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    input::placeholder {
+      color: #95a5a6;
     }
 
     button {
-      background: #fff;
-      color: #0072ff;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
       font-weight: bold;
       cursor: pointer;
+      border: none;
+      padding: 16px;
+      font-size: 18px;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: var(--transition);
     }
 
     button:hover {
-      background: #6dd5ed;
-      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:active {
+      transform: translateY(0);
     }
 
     .post {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 15px;
-      margin: 10px 0;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      margin: 15px 0;
       border-radius: 12px;
       text-align: left;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      border-left: 4px solid var(--primary);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .post:hover {
+      border-left: 4px solid var(--accent);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #ddd;
+    }
+
+    .post-time {
+      font-size: 14px;
+      color: #7f8c8d;
     }
 
     .success {
-      background: #28a745;
+      background: var(--success);
       color: white;
-      padding: 10px;
-      margin: 10px auto;
+      padding: 15px;
+      margin: 15px 0;
       border-radius: 8px;
-      width: 90%;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
     }
 
     .error {
-      background: #dc3545;
+      background: var(--error);
       color: white;
-      padding: 10px;
-      margin: 10px auto;
+      padding: 15px;
+      margin: 15px 0;
       border-radius: 8px;
-      width: 90%;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .help-board {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid rgba(52, 152, 219, 0.3);
+    }
+
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .refresh-btn {
+      width: auto;
+      padding: 8px 15px;
+      font-size: 14px;
+      background: linear-gradient(135deg, var(--warning), var(--accent));
+    }
+
+    .post-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent);
+      color: white;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: white;
+      font-size: 14px;
+      padding: 20px;
+    }
+
+    .footer a {
+      color: #ffcc00;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      header {
+        font-size: 22px;
+        padding: 20px 15px;
+      }
+      
+      .reasons-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .card {
+        padding: 20px 15px;
+      }
+    }
+
+    /* Text space effect */
+    .spaced-text {
+      letter-spacing: 1px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
     }
   </style>
 </head>
 <body>
 
-  <header>🤝 आपसी मदद केंद्र</header>
+  <header>
+    <div class="spaced-text">🤝 आपसी मदद केंद्र</div>
+  </header>
 
   <div class="container">
 
     <!-- 🌟 Motivational Message -->
-    <div style="background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 20px; border-radius: 10px; font-size: 16px;">
-      <strong>🌟 “आपके एक छोटे कदम से किसी की ज़िंदगी बदल सकती है।”</strong><br><br>
-      🤝 चलिए साथ मिलकर समाज को बेहतर बनाएं।<br>
-      मदद करें — जब भी, जहाँ भी, जितनी हो सके।
+    <div class="card motivation-card">
+      <div class="icon">
+        <i class="fas fa-hands-helping"></i>
+      </div>
+      <h3>🌟 "आपके एक छोटे कदम से किसी की ज़िंदगी बदल सकती है।"</h3>
+      <p class="spaced-text" style="text-align: center; line-height: 1.8;">
+        🤝 चलिए साथ मिलकर समाज को बेहतर बनाएं।<br>
+        मदद करें — जब भी, जहाँ भी, जितनी हो सके।
+      </p>
     </div>
 
     <!-- 🔔 Help Reason Box -->
-    <div style="background: rgba(255,255,255,0.15); padding: 15px; margin-bottom: 20px; border-radius: 10px;">
-      <strong>🔔 आप किन चीज़ों के लिए मदद माँग सकते हैं?</strong><br><br>
-      💊 दवाइयों की ज़रूरत<br>
-      🧥 कपड़े / कंबल<br>
-      💼 नौकरी / काम की तलाश<br>
-      🚗 मरीज को हॉस्पिटल ले जाना<br>
-      🏠 किराए का कमरा / घर चाहिए<br>
-      📚 पढ़ाई में मदद<br>
-      ⚡ बिजली / पानी की समस्या<br>
-      👨‍👩‍👧‍👦 बुजुर्ग / बच्चों के लिए मदद
+    <div class="card">
+      <h3><i class="fas fa-bell"></i> आप किन चीज़ों के लिए मदद माँग सकते हैं?</h3>
+      <div class="reasons-grid">
+        <div class="reason-item">
+          <i class="fas fa-pills"></i>
+          <div>💊 दवाइयों की ज़रूरत</div>
+        </div>
+        <div class="reason-item">
+          <i class="fas fa-tshirt"></i>
+          <div>🧥 कपड़े / कंबल</div>
+        </div>
+        <div class="reason-item">
+          <i class="fas fa-briefcase"></i>
+          <div>💼 नौकरी / काम की तलाश</div>
+        </div>
+        <div class="reason-item">
+          <i class="fas fa-ambulance"></i>
+          <div>🚗 मरीज को हॉस्पिटल ले जाना</div>
+        </div>
+        <div class="reason-item">
+          <i class="fas fa-home"></i>
+          <div>🏠 किराए का कमरा / घर चाहिए</div>
+        </div>
+        <div class="reason-item">
+          <i class="fas fa-book-open"></i>
+          <div>📚 पढ़ाई में मदद</div>
+        </div>
+        <div class="reason-item">
+          <i class="fas fa-bolt"></i>
+          <div>⚡ बिजली / पानी की समस्या</div>
+        </div>
+        <div class="reason-item">
+          <i class="fas fa-hands-helping"></i>
+          <div>👨‍👩‍👧‍👦 बुजुर्ग / बच्चों के लिए मदद</div>
+        </div>
+      </div>
     </div>
 
     <!-- ✅ Message Box -->
     <div id="msgBox"></div>
 
     <!-- 📝 Post Form -->
-    <form id="helpForm">
-      <input type="text" id="name" placeholder="आपका नाम" required><br>
-      <input type="text" id="mobile" placeholder="मोबाइल नंबर" required><br>
-      <input type="text" id="area" placeholder="आपका एरिया" required><br>
-      <select id="reason" required>
-        <option value="">-- मदद का कारण चुनें --</option>
-        <option>💊 दवाइयों की ज़रूरत</option>
-        <option>🧥 कपड़े / कंबल</option>
-        <option>💼 नौकरी / काम की तलाश</option>
-        <option>🚗 मरीज को हॉस्पिटल ले जाना</option>
-        <option>🏠 किराए का कमरा / घर चाहिए</option>
-        <option>📚 पढ़ाई में मदद</option>
-        <option>⚡ बिजली / पानी की समस्या</option>
-        <option>👨‍👩‍👧‍👦 बुजुर्ग / बच्चों के लिए मदद</option>
-      </select><br>
-      <button type="submit">पोस्ट करें</button>
-    </form>
+    <div class="card pulse">
+      <h3><i class="fas fa-edit"></i> मदद का अनुरोध करें</h3>
+      <form id="helpForm">
+        <input type="text" id="name" placeholder="आपका नाम" required>
+        <input type="text" id="mobile" placeholder="मोबाइल नंबर" required>
+        <input type="text" id="area" placeholder="आपका एरिया" required>
+        <select id="reason" required>
+          <option value="">-- मदद का कारण चुनें --</option>
+          <option>💊 दवाइयों की ज़रूरत</option>
+          <option>🧥 कपड़े / कंबल</option>
+          <option>💼 नौकरी / काम की तलाश</option>
+          <option>🚗 मरीज को हॉस्पिटल ले जाना</option>
+          <option>🏠 किराए का कमरा / घर चाहिए</option>
+          <option>📚 पढ़ाई में मदद</option>
+          <option>⚡ बिजली / पानी की समस्या</option>
+          <option>👨‍👩‍👧‍👦 बुजुर्ग / बच्चों के लिए मदद</option>
+        </select>
+        <button type="submit"><i class="fas fa-paper-plane"></i> पोस्ट करें</button>
+      </form>
+    </div>
 
     <!-- 🔴 Live Help Board -->
-    <h3 style="margin-top: 40px;">🔴 Live Help Board</h3>
-    <div id="posts"></div>
+    <div class="help-board">
+      <div class="board-header">
+        <h3><i class="fas fa-fire"></i> लाइव मदद बोर्ड</h3>
+        <button class="refresh-btn"><i class="fas fa-sync-alt"></i> ताज़ा करें</button>
+      </div>
+      <div id="posts"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2023 आपसी मदद केंद्र | "सबका साथ, सबका विकास"</p>
+    <p>हमें साथ मिलकर समाज को बेहतर बनाना है</p>
   </div>
 
   <!-- Firebase SDKs -->
@@ -133,11 +506,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
   <script>
-    // ✅ Firebase Config (Updated)
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyD2o9QWQYbM60C0_0C8HjAaPcCvD0Y6OZE",
       authDomain: "help-b38c1.firebaseapp.com",
-      databaseURL: "https://help-b38c1-default-rtdb.asia-southeast1.firebasedatabase.app", // ✅ Updated
+      databaseURL: "https://help-b38c1-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "help-b38c1",
       storageBucket: "help-b38c1.appspot.com",
       messagingSenderId: "58715936530",
@@ -148,6 +521,7 @@
     const db = firebase.database();
     const form = document.getElementById("helpForm");
     const msgBox = document.getElementById("msgBox");
+    const refreshBtn = document.querySelector(".refresh-btn");
 
     // Get device ID from localStorage
     let deviceID = localStorage.getItem("device_id");
@@ -199,6 +573,14 @@
       });
     });
 
+    refreshBtn.addEventListener("click", function() {
+      loadPosts();
+      this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ताज़ा हो रहा...';
+      setTimeout(() => {
+        this.innerHTML = '<i class="fas fa-sync-alt"></i> ताज़ा करें';
+      }, 1000);
+    });
+
     function showMsg(msg, type) {
       msgBox.innerHTML = `<div class="${type}">${msg}</div>`;
       setTimeout(() => msgBox.innerHTML = "", 4000);
@@ -216,22 +598,56 @@
         return;
       }
 
+      const timeAgo = formatTimeAgo(age);
+      
       const postDiv = document.createElement("div");
       postDiv.className = "post";
       postDiv.innerHTML = `
-        <strong>👤 नाम:</strong> ${data.name}<br>
-        <strong>📱 मोबाइल:</strong> ${data.mobile}<br>
-        <strong>📍 एरिया:</strong> ${data.area}<br>
-        <strong>📌 मदद का कारण:</strong> ${data.reason}<br>
+        <div class="post-badge">नया</div>
+        <div class="post-header">
+          <strong>${data.reason.split(' ')[0]}</strong>
+          <span class="post-time">${timeAgo}</span>
+        </div>
+        <div><strong>👤 नाम:</strong> ${data.name}</div>
+        <div><strong>📱 मोबाइल:</strong> ${data.mobile}</div>
+        <div><strong>📍 एरिया:</strong> ${data.area}</div>
+        <div><strong>📌 मदद का कारण:</strong> ${data.reason}</div>
       `;
       postsContainer.appendChild(postDiv);
     }
+    
+    function formatTimeAgo(ms) {
+      const sec = Math.floor(ms / 1000);
+      if (sec < 60) return `${sec} सेकंड पहले`;
+      const min = Math.floor(sec / 60);
+      if (min < 60) return `${min} मिनट पहले`;
+      const hrs = Math.floor(min / 60);
+      return `${hrs} घंटे पहले`;
+    }
 
-    db.ref("posts").on("value", (snapshot) => {
-      postsContainer.innerHTML = "";
-      snapshot.forEach((child) => {
-        displayPost(child.key, child.val());
+    function loadPosts() {
+      db.ref("posts").once("value", (snapshot) => {
+        postsContainer.innerHTML = "";
+        if (!snapshot.exists()) {
+          postsContainer.innerHTML = '<div class="post" style="text-align: center; padding: 30px;">अभी तक कोई पोस्ट नहीं है। पहले बनें!</div>';
+          return;
+        }
+        snapshot.forEach((child) => {
+          displayPost(child.key, child.val());
+        });
       });
+    }
+
+    // Initial load
+    loadPosts();
+    
+    // Real-time updates
+    db.ref("posts").on("child_added", (snapshot) => {
+      displayPost(snapshot.key, snapshot.val());
+    });
+    
+    db.ref("posts").on("child_removed", (snapshot) => {
+      loadPosts();
     });
   </script>
 
